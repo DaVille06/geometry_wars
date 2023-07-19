@@ -10,6 +10,9 @@ public:
 	Vec2 speed;
 	Vec2 scale;
 	double angle;
+
+	CTransform();
+	CTransform(const Vec2& p, const Vec2& v);
 };
 
 #endif // !CTRANSFORM_H

@@ -3,10 +3,7 @@
 
 #include <memory>
 #include <string>
-#include "CTransform.h"
-#include "CShape.h"
-#include "CCollision.h"
-#include "CScore.h"
+#include "Components.h"
 
 class Entity
 {
@@ -14,9 +11,9 @@ public:
 	std::shared_ptr<CTransform> cTransform;
 	std::shared_ptr<CShape> cShape;
 	std::shared_ptr<CCollision> cCollision;
-	// std::shared_ptr<CInput> cInput;
+	std::shared_ptr<CInput> cInput;
 	std::shared_ptr<CScore> cScore;
-	// std::shared_ptr<CLifespan> cLifespan;
+	std::shared_ptr<CLifespan> cLifespan;
 
 	void destroy();
 	bool isActive();

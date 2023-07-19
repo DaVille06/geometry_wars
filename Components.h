@@ -12,6 +12,16 @@ public:
 	CCollision() {}
 };
 
+class CInput
+{
+	CInput() {}
+};
+
+class CLifespan
+{
+	CLifespan() {}
+};
+
 class CScore
 {
 public:

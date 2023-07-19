@@ -23,10 +23,14 @@ public:
 	std::string& tag();
 	size_t id();
 
+	friend class EntityManager;
+
 private:
 	std::string m_tag;
 	bool m_active;
 	size_t m_id;
+
+	Entity();
 };
 
 #endif // !ENTITY_H

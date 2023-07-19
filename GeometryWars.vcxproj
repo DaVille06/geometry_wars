@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CShape.h" />
+    <ClInclude Include="CTransform.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>

@@ -29,5 +29,8 @@
     <ClInclude Include="CShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@ class CShape
 {
 public:
 	sf::CircleShape shape;
+
 	CShape() {}
 };
 

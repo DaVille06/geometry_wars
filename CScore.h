@@ -4,7 +4,9 @@
 class CScore
 {
 public:
-	int score;
+	int score{0};
+
+	CScore() {}
 };
 
 #endif // !CSCORE_H

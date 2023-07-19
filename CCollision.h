@@ -4,7 +4,9 @@
 class CCollision
 {
 public:
-	float radius;
+	float radius{0.0f};
+
+	CCollision() {}
 };
 
 #endif // !CCOLLISION_H

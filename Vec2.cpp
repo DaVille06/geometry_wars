@@ -56,7 +56,8 @@ void Vec2::operator*=(const float val)
 
 void Vec2::operator/=(const float val)
 {
-	// todo
+	x /= val;
+	y /= val;
 }
 
 float Vec2::dist(const Vec2& rhs) const

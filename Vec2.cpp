@@ -8,8 +8,7 @@ Vec2::Vec2(float xin, float yin)
 
 bool Vec2::operator==(const Vec2& rhs) const
 {
-	// todo
-	return false;
+	return (x == rhs.x && y == rhs.y);
 }
 
 bool Vec2::operator!=(const Vec2& rhs) const

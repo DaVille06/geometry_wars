@@ -23,8 +23,7 @@ Vec2 Vec2::operator+(const Vec2& rhs) const
 
 Vec2 Vec2::operator-(const Vec2& rhs) const
 {
-	// todo
-	return Vec2{ 0, 0 };
+	return Vec2{ x - rhs.x, y - rhs.y };
 }
 
 Vec2 Vec2::operator*(const float val) const

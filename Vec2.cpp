@@ -50,7 +50,8 @@ void Vec2::operator-=(const Vec2& rhs)
 
 void Vec2::operator*=(const float val)
 {
-	// todo
+	x *= val;
+	y *= val;
 }
 
 void Vec2::operator/=(const float val)

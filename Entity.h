@@ -16,18 +16,18 @@ public:
 	std::shared_ptr<CLifespan> cLifespan;
 
 	void destroy();
-	bool isActive();
-	std::string& tag();
-	size_t id();
-
-	friend class EntityManager;
+	bool isActive() const;
+	const std::string& tag() const;
+	const size_t id() const;
 
 private:
-	std::string m_tag;
-	bool m_active;
-	size_t m_id;
+	friend class EntityManager;
 
-	Entity();
+	std::string m_tag{ "default" };
+	bool m_active{ true };
+	size_t m_id{ 0 };
+
+	Entity(const size_t i, const std::string& t);
 };
 
 #endif // !ENTITY_H

@@ -33,21 +33,27 @@ public:
 class CShape
 {
 public:
-	sf::CircleShape shape;
+	sf::CircleShape circle;
 
-	CShape() {}
+	CShape(float radius, int points, const sf::Color& fill, const sf::Color& outline, float thickness)
+		: circle(radius, points)
+	{
+		circle.setFillColor(fill);
+		circle.setOutlineColor(outline);
+		circle.setOutlineThickness(thickness);
+		circle.setOrigin(radius, radius);
+	}
 };
 
 class CTransform
 {
 public:
-	Vec2 pos;
-	Vec2 speed;
-	Vec2 scale;
-	double angle;
+	Vec2 pos{ 0.0, 0.0 };
+	Vec2 velocity{ 0.0, 0.0 };
+	float angle{ 0 };
 
-	CTransform();
-	CTransform(const Vec2& p, const Vec2& v);
+	CTransform(const Vec2& p, const Vec2& v, float a)
+		: pos{p}, velocity{v}, angle{a} { }
 };
 
 #endif // !COMPONENTS_H

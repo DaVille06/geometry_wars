@@ -19,8 +19,11 @@ public:
 
 private:
 	EntityVec m_entities;
+	EntityVec m_entitiesToAdd;
 	EntityMap m_entityMap;
-	EntityVec m_toAdd;
+	size_t m_totalEntities{ 0 };
+
+	void removeDeadEntities(EntityVec& vec);
 };
 
 #endif // !ENTITY_MANAGER_H

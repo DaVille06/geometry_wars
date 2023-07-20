@@ -8,12 +8,14 @@ Vec2::Vec2(float xin, float yin)
 
 bool Vec2::operator==(const Vec2& rhs) const
 {
-
+	// todo
+	return false;
 }
 
 bool Vec2::operator!=(const Vec2& rhs) const
 {
-
+	// todo
+	return false;
 }
 
 Vec2 Vec2::operator+(const Vec2& rhs) const
@@ -66,7 +68,13 @@ float Vec2::dist(const Vec2& rhs) const
 	return 0.0f;
 }
 
+float Vec2::length() const
+{
+	// todo
+	return 0.0f;
+}
+
 void Vec2::normalize()
 {
-
+	// todo
 }

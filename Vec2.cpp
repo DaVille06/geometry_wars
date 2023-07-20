@@ -36,8 +36,7 @@ Vec2 Vec2::operator*(const float val) const
 
 Vec2 Vec2::operator/(const float val) const
 {
-	// todo
-	return Vec2{ 0, 0 };
+	return Vec2{ x / val, y / val };
 }
 
 void Vec2::operator+=(const Vec2& rhs)

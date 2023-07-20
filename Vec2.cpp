@@ -13,8 +13,7 @@ bool Vec2::operator==(const Vec2& rhs) const
 
 bool Vec2::operator!=(const Vec2& rhs) const
 {
-	// todo
-	return false;
+	return (x != rhs.x && y != rhs.y);
 }
 
 Vec2 Vec2::operator+(const Vec2& rhs) const

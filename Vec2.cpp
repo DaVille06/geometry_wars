@@ -38,7 +38,8 @@ Vec2 Vec2::operator/(const float val) const
 
 void Vec2::operator+=(const Vec2& rhs)
 {
-	// todo
+	x += rhs.x;
+	y += rhs.y;
 }
 
 void Vec2::operator-=(const Vec2& rhs)

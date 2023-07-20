@@ -4,8 +4,8 @@
 class Vec2
 {
 public:
-	double x{ 0 };
-	double y{ 0 };
+	float x{ 0 };
+	float y{ 0 };
 
 	Vec2();
 	Vec2(float xin, float yin);

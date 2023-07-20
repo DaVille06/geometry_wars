@@ -33,13 +33,20 @@ private:
 	std::shared_ptr<Entity> m_player;
 
 	void init(const std::string& path);		// initialize the GameState with a config file path
+	void setPaused(bool paused);			// pause the game
+	
+	void sMovement();						// system: entity position / movement update
+	void sUserInput();						// system: user input
+	void sLifespan();						// system: lifespan
+	void sRender();							// system: render / drawing
+	void sEnemySpawner();					// system: spawns enemies
+	void sCollision();						// system: collisions
+
 	void spawnPlayer();
-	void update();
-	void sMovement();
-	void sUserInput();
-	void sRender();
-	void sEnemySpawner();
-	void sCollision();
+	void spawnEnemy();
+	void spawnSmallEnemies(std::shared_ptr<Entity> entity);
+	void spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos);
+	void spawnSpecialWeapon(std::shared_ptr<Entity> entity);
 };
 
 #endif // !GAME_H

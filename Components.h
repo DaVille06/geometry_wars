@@ -7,27 +7,41 @@
 class CCollision
 {
 public:
-	float radius{0.0f};
+	float radius{ 0 };
 
-	CCollision() {}
+	CCollision(float r) 
+		: radius{ r } { }
 };
 
 class CInput
 {
+public:
+	bool up{ false };
+	bool left{ false };
+	bool right{ false };
+	bool down{ false };
+	bool shoot{ false };
+
 	CInput() {}
 };
 
 class CLifespan
 {
-	CLifespan() {}
+public:
+	int remaining{ 0 };		// amount of lifespan remaining on the entity
+	int total{ 0 };			// the total initial amount of lifespan
+
+	CLifespan(int total)
+		: remaining{ total }, total{ total } { }
 };
 
 class CScore
 {
 public:
-	int score{0};
+	int score{ 0 };
 
-	CScore() {}
+	CScore(int s)
+		: score{ s } { }
 };
 
 class CShape

@@ -1,9 +1,6 @@
 #include "EntityManager.h"
 
-EntityManager::EntityManager()
-{
-
-}
+EntityManager::EntityManager() { }
 
 void EntityManager::update()
 {
@@ -16,25 +13,27 @@ void EntityManager::update()
 
 	// remove dead entities from each vector in the entity map
 	// c++17 way of iterating through [key, value] pairs in a map
-	for (auto& [tag, entityVec] : m_entityMap)
-	{
-		removeDeadEntities(entityVec);
-	}
+	//for (auto& [tag, entityVec] : m_entityMap)
+	//{
+	//	removeDeadEntities(entityVec);
+	//}
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag)
 {
-
+	auto entity = std::make_shared<Entity>(new Entity(m_totalEntities++, tag));
+	m_entitiesToAdd.push_back(entity);
+	return entity;
 }
 
 EntityVec& EntityManager::getEntities()
 {
-
+	return m_entities;
 }
 
 EntityVec& EntityManager::getEntities(const std::string& tag)
 {
-
+	return m_entityMap[tag];
 }
 
 void EntityManager::removeDeadEntities(EntityVec& vec)

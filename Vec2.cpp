@@ -65,3 +65,8 @@ float Vec2::dist(const Vec2& rhs) const
 	// todo
 	return 0.0f;
 }
+
+void Vec2::normalize()
+{
+
+}

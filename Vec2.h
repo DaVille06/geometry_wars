@@ -24,6 +24,7 @@ public:
 	void operator /= (const float val);
 
 	float dist(const Vec2& rhs) const;
+	void normalize();
 };
 
 #endif // !VEC2_H

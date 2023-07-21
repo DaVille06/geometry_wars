@@ -13,10 +13,10 @@ void EntityManager::update()
 
 	// remove dead entities from each vector in the entity map
 	// c++17 way of iterating through [key, value] pairs in a map
-	//for (auto& [tag, entityVec] : m_entityMap)
-	//{
-	//	removeDeadEntities(entityVec);
-	//}
+	for (auto& [tag, entityVec] : m_entityMap)
+	{
+		removeDeadEntities(entityVec);
+	}
 }
 
 std::shared_ptr<Entity> EntityManager::addEntity(const std::string& tag)

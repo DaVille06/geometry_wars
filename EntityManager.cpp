@@ -8,6 +8,8 @@ void EntityManager::update()
 	// add them to the vector of all entities
 	// add them to the vector inside the map, with the tag as the key
 
+
+
 	// remove dead entities from the vector of all entities
 	removeDeadEntities(m_entities);
 

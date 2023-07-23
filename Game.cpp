@@ -64,15 +64,28 @@ void Game::sMovement()
 	// you should read the m_player->cInput component to determine if the player is moving
 	m_player->cTransform->velocity = { 0,0 };
 
-	// implement player movement - need to check bounds of screen
-	if (m_player->cInput->up)
+	// implement player movement
+	// need to set velocity from playerConfig (once we start reading that in)
+	if (m_player->cInput->up &&
+		(m_player->cTransform->pos.y - m_player->cShape->circle.getRadius() >= 0))
+	{
 		m_player->cTransform->velocity.y = -5;
-	if (m_player->cInput->left)
+	}
+	if (m_player->cInput->left &&
+		(m_player->cTransform->pos.x - m_player->cShape->circle.getRadius() >= 0))
+	{
 		m_player->cTransform->velocity.x = -5;
-	if (m_player->cInput->down)
+	}
+	if (m_player->cInput->down &&
+		(m_player->cTransform->pos.y + m_player->cShape->circle.getRadius() <= m_window.getSize().y))
+	{
 		m_player->cTransform->velocity.y = 5;
-	if (m_player->cInput->right)
+	}
+	if (m_player->cInput->right &&
+		(m_player->cTransform->pos.x + m_player->cShape->circle.getRadius() <= m_window.getSize().x))
+	{
 		m_player->cTransform->velocity.x = 5;
+	}
 
 	// sample movement speed update
 	m_player->cTransform->pos.x += m_player->cTransform->velocity.x;

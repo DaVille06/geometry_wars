@@ -71,7 +71,7 @@ void Game::spawnPlayer()
 	float midx = m_window.getSize().x / 2.0f;
 	float midy = m_window.getSize().y / 2.0f;
 	entity->cTransform = std::make_shared<CTransform>(
-		Vec2(midx, midy), Vec2(1.0f, 1.0f), 0.0f);
+		Vec2(midx, midy), Vec2(0.0f, 0.0f), 0.0f);
 
 	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickeness 4
 	entity->cShape = std::make_shared<CShape>(
@@ -90,6 +90,16 @@ void Game::spawnEnemy()
 {
 	// todo: make sure the enemy is spawned properly with the m_enemyConfig variables
 	// the enemy must be spawned completely within the bounds of the window
+	auto entity = m_entities.addEntity("enemy");
+
+	// give this entity a transform so it spawns at (200, 200) with velocity (1,1) and angle 0
+	float ex = rand() % m_window.getSize().x;
+	float ey = rand() % m_window.getSize().y;
+
+	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey), Vec2(0.0f, 0.0f), 0.0f);
+
+	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickness 4
+	entity->cShape = std::make_shared<CShape>(16.0f, 8, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
 
 	// record when the most recent enemy was spawned
 	m_lastEnemySpawnTime = m_currentFrame;
@@ -101,15 +111,39 @@ void Game::spawnSmallEnemies(std::shared_ptr<Entity> entity)
 	// todo: spawn small enemies at the location of the input enemy entity
 
 	// when we create the smaller enemy, we have to read the values of the original enemy
+	// spawn a number of small enemies equal to the vertices of the original enemy
+	// set each small enemy to the same color as the original, half the size
+	// small enemies are worth double points of the original enemy
 }
 
-void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos) {}
+// spawns a bullet from a given entity to a target location
+void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos) 
+{
+	// todo: implement the spawning of a bullet which travels toward target
+	// bullet speed is given as a scalar speed
+	// you must set the velocity by using formula in notes
+}
 
-void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity) {}
+void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity) 
+{
+	// todo: implement your own special weapon
+}
 
 void Game::sMovement()
 {
+	// todo: implement all entity movement in this function
+	// you should read the m_player->cInput component to determine if the player is moving
+	m_player->cTransform->velocity = { 0,0 };
 
+	// implement player movement
+	if (m_player->cInput->up)
+	{
+		m_player->cTransform->velocity.y = -5;
+	}
+
+	// sample movement speed update
+	m_player->cTransform->pos.x += m_player->cTransform->velocity.x;
+	m_player->cTransform->pos.y += m_player->cTransform->velocity.y;
 }
 
 void Game::sUserInput()
@@ -134,6 +168,7 @@ void Game::sUserInput()
 			case sf::Keyboard::W:
 				std::cout << "W Key Pressed\n";
 				// todo: set players input component "up" to true
+				m_player->cInput->up = true;
 				break;
 			case sf::Keyboard::A:
 				std::cout << "A Key Pressed\n";
@@ -155,6 +190,7 @@ void Game::sUserInput()
 			case sf::Keyboard::W:
 				std::cout << "W Key Released\n";
 				// todo: set players input component "up" to false
+				m_player->cInput->up = false;
 				break;
 			default:
 				break;
@@ -201,15 +237,29 @@ void Game::sRender()
 
 void Game::sEnemySpawner()
 {
+	// todo: code which implements enemy spawning should go here
 
+	// use (m_currentFrame - m_lastEnemySpawnTime) to determine
+	// how long it has been since the last enemy spawned
+	// if curentframe - spawntime is 100 and I want to wait til 200
+	// then don't spawn
+	//spawnEnemy();
 }
 
 void Game::sCollision()
 {
-
+	// todo: implement all proper collisions between entities
+	// be sure to use the collision radius, NOT the shape radius
 }
 
 void Game::sLifespan()
 {
-
+	// todo: implement all lifespan functionality
+	// for all entities
+	// if entity has no lifespan component, skip it
+	// if entity has > 0 remaining lifespan, subtract 1
+	// if it has lifespan and is alive
+	//		scale its alpha chanel properly
+	// if it has lifespan and its time is up
+	//		destroy the entity
 }

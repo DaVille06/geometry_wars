@@ -47,6 +47,12 @@ private:
 	void spawnSmallEnemies(std::shared_ptr<Entity> entity);
 	void spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos);
 	void spawnSpecialWeapon(std::shared_ptr<Entity> entity);
+
+	void readWindowConfig(std::ifstream& fin);
+	void readFontConfig(std::ifstream& fin);
+	void readPlayerConfig(std::ifstream& fin);
+	void readEnemyConfig(std::ifstream& fin);
+	void readBulletConfig(std::ifstream& fin);
 };
 
 #endif // !GAME_H

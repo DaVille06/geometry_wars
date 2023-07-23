@@ -45,89 +45,23 @@ void Game::init(const std::string& path)
 	{
 		if (configCode == "Window")
 		{
-			// W H FL FS
-			// set window values
-			int width, height, frameRateLimit;
-			bool fullScreen;
-			fin >>
-				width >>
-				height >>
-				frameRateLimit >>
-				fullScreen;
-			m_window.create(sf::VideoMode(width, height), "Geometry Wars!");
-			m_window.setFramerateLimit(frameRateLimit);
+			readWindowConfig(fin);
 		}
 		else if (configCode == "Font")
 		{
-			// F S R G B
-			std::string fontFileName;
-			int fontSize, rFontColor, gFontColor, bFontColor;
-			fin >> fontFileName;
-
-			if (!m_font.loadFromFile(fontFileName))
-			{
-				perror("There was a problem loading the specified font file. Please check config and try again...");
-				break;
-			}
-
-			fin >> 
-				fontSize >> 
-				rFontColor >> 
-				gFontColor >> 
-				bFontColor;
-			m_text.setFont(m_font);
-			m_text.setCharacterSize(fontSize);
-			m_text.setFillColor(sf::Color(rFontColor, gFontColor, bFontColor));
+			readFontConfig(fin);
 		}
 		else if (configCode == "Player")
 		{
-			// SR CR S FR FG FB OR OG OB OT V
-			fin >>
-				m_playerConfig.SR >>
-				m_playerConfig.CR >>
-				m_playerConfig.S >>
-				m_playerConfig.FR >>
-				m_playerConfig.FG >>
-				m_playerConfig.FB >>
-				m_playerConfig.OR >>
-				m_playerConfig.OG >>
-				m_playerConfig.OB >>
-				m_playerConfig.OT >>
-				m_playerConfig.V;
+			readPlayerConfig(fin);
 		}
 		else if (configCode == "Enemy")
 		{
-			// SR CR SMIN SMAX OR OG OB OT VMIN VMAX L SI
-			fin >>
-				m_enemyConfig.SR >>
-				m_enemyConfig.CR >>
-				m_enemyConfig.SMIN >>
-				m_enemyConfig.SMAX >>
-				m_enemyConfig.OR >>
-				m_enemyConfig.OG >>
-				m_enemyConfig.OB >>
-				m_enemyConfig.OT >>
-				m_enemyConfig.VMIN >>
-				m_enemyConfig.VMAX >>
-				m_enemyConfig.L >>
-				m_enemyConfig.SI;
+			readEnemyConfig(fin);
 		}
 		else if (configCode == "Bullet")
 		{
-			// SR CR S FR FG FB OR OG OB OT V L
-			fin >>
-				m_bulletConfig.SR >>
-				m_bulletConfig.CR >>
-				m_bulletConfig.S >>
-				m_bulletConfig.FR >>
-				m_bulletConfig.FG >>
-				m_bulletConfig.FB >>
-				m_bulletConfig.OR >>
-				m_bulletConfig.OG >>
-				m_bulletConfig.OB >>
-				m_bulletConfig.OT >>
-				m_bulletConfig.V >>
-				m_bulletConfig.L;
+			readBulletConfig(fin);
 		}
 		else
 		{
@@ -365,4 +299,94 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
 {
 	// todo: implement your own special weapon
+}
+
+// ***** READ CONFIGS *****
+void Game::readWindowConfig(std::ifstream& fin)
+{
+	// W H FL FS
+	int width, height, frameRateLimit;
+	bool fullScreen;
+	fin >>
+		width >>
+		height >>
+		frameRateLimit >>
+		fullScreen;
+	m_window.create(sf::VideoMode(width, height), "Geometry Wars!");
+	m_window.setFramerateLimit(frameRateLimit);
+}
+
+void Game::readFontConfig(std::ifstream& fin)
+{
+	// F S R G B
+	std::string fontFileName;
+	int fontSize, rFontColor, gFontColor, bFontColor;
+	fin >> fontFileName;
+
+	if (!m_font.loadFromFile(fontFileName))
+	{
+		perror("There was a problem loading the specified font file. Please check config and try again...");
+	}
+
+	fin >>
+		fontSize >>
+		rFontColor >>
+		gFontColor >>
+		bFontColor;
+	m_text.setFont(m_font);
+	m_text.setCharacterSize(fontSize);
+	m_text.setFillColor(sf::Color(rFontColor, gFontColor, bFontColor));
+}
+
+void Game::readPlayerConfig(std::ifstream& fin)
+{
+	// SR CR S FR FG FB OR OG OB OT V
+	fin >>
+		m_playerConfig.SR >>
+		m_playerConfig.CR >>
+		m_playerConfig.S >>
+		m_playerConfig.FR >>
+		m_playerConfig.FG >>
+		m_playerConfig.FB >>
+		m_playerConfig.OR >>
+		m_playerConfig.OG >>
+		m_playerConfig.OB >>
+		m_playerConfig.OT >>
+		m_playerConfig.V;
+}
+
+void Game::readEnemyConfig(std::ifstream& fin)
+{
+	// SR CR SMIN SMAX OR OG OB OT VMIN VMAX L SI
+	fin >>
+		m_enemyConfig.SR >>
+		m_enemyConfig.CR >>
+		m_enemyConfig.SMIN >>
+		m_enemyConfig.SMAX >>
+		m_enemyConfig.OR >>
+		m_enemyConfig.OG >>
+		m_enemyConfig.OB >>
+		m_enemyConfig.OT >>
+		m_enemyConfig.VMIN >>
+		m_enemyConfig.VMAX >>
+		m_enemyConfig.L >>
+		m_enemyConfig.SI;
+}
+
+void Game::readBulletConfig(std::ifstream& fin)
+{
+	// SR CR S FR FG FB OR OG OB OT V L
+	fin >>
+		m_bulletConfig.SR >>
+		m_bulletConfig.CR >>
+		m_bulletConfig.S >>
+		m_bulletConfig.FR >>
+		m_bulletConfig.FG >>
+		m_bulletConfig.FB >>
+		m_bulletConfig.OR >>
+		m_bulletConfig.OG >>
+		m_bulletConfig.OB >>
+		m_bulletConfig.OT >>
+		m_bulletConfig.V >>
+		m_bulletConfig.L;
 }

@@ -39,15 +39,101 @@ void Game::init(const std::string& path)
 {
 	// read in config file here
 	std::ifstream fin(path);
-	// use the premade PlayerConfig, EnemyConfig, BulletConfig variables
+	std::string configCode;
 
-	// if i know im on player portion
-	//fin >> m_playerConfig.SR >> m_playerConfig.CR >> ....
+	while (fin >> configCode)
+	{
+		if (configCode == "Window")
+		{
+			// W H FL FS
+			// set window values
+			int width, height, frameRateLimit;
+			bool fullScreen;
+			fin >>
+				width >>
+				height >>
+				frameRateLimit >>
+				fullScreen;
+			m_window.create(sf::VideoMode(width, height), "Geometry Wars!");
+			m_window.setFramerateLimit(frameRateLimit);
+		}
+		else if (configCode == "Font")
+		{
+			// F S R G B
+			std::string fontFileName;
+			int fontSize, rFontColor, gFontColor, bFontColor;
+			fin >> fontFileName;
 
-	// set up default window parameters
-	// read these from config as well
-	m_window.create(sf::VideoMode(1280, 720), "Assignment 2");
-	m_window.setFramerateLimit(60);
+			if (!m_font.loadFromFile(fontFileName))
+			{
+				perror("There was a problem loading the specified font file. Please check config and try again...");
+				break;
+			}
+
+			fin >> 
+				fontSize >> 
+				rFontColor >> 
+				gFontColor >> 
+				bFontColor;
+			m_text.setFont(m_font);
+			m_text.setCharacterSize(fontSize);
+			m_text.setFillColor(sf::Color(rFontColor, gFontColor, bFontColor));
+		}
+		else if (configCode == "Player")
+		{
+			// SR CR S FR FG FB OR OG OB OT V
+			fin >>
+				m_playerConfig.SR >>
+				m_playerConfig.CR >>
+				m_playerConfig.S >>
+				m_playerConfig.FR >>
+				m_playerConfig.FG >>
+				m_playerConfig.FB >>
+				m_playerConfig.OR >>
+				m_playerConfig.OG >>
+				m_playerConfig.OB >>
+				m_playerConfig.OT >>
+				m_playerConfig.V;
+		}
+		else if (configCode == "Enemy")
+		{
+			// SR CR SMIN SMAX OR OG OB OT VMIN VMAX L SI
+			fin >>
+				m_enemyConfig.SR >>
+				m_enemyConfig.CR >>
+				m_enemyConfig.SMIN >>
+				m_enemyConfig.SMAX >>
+				m_enemyConfig.OR >>
+				m_enemyConfig.OG >>
+				m_enemyConfig.OB >>
+				m_enemyConfig.OT >>
+				m_enemyConfig.VMIN >>
+				m_enemyConfig.VMAX >>
+				m_enemyConfig.L >>
+				m_enemyConfig.SI;
+		}
+		else if (configCode == "Bullet")
+		{
+			// SR CR S FR FG FB OR OG OB OT V L
+			fin >>
+				m_bulletConfig.SR >>
+				m_bulletConfig.CR >>
+				m_bulletConfig.S >>
+				m_bulletConfig.FR >>
+				m_bulletConfig.FG >>
+				m_bulletConfig.FB >>
+				m_bulletConfig.OR >>
+				m_bulletConfig.OG >>
+				m_bulletConfig.OB >>
+				m_bulletConfig.OT >>
+				m_bulletConfig.V >>
+				m_bulletConfig.L;
+		}
+		else
+		{
+			std::cout << "Unknown entry in config file!";
+		}
+	}
 
 	spawnPlayer();
 }
@@ -60,12 +146,9 @@ void Game::setPaused(bool paused)
 // ***** SYSTEMS *****
 void Game::sMovement()
 {
-	// todo: implement all entity movement in this function
-	// you should read the m_player->cInput component to determine if the player is moving
+	// todo: read velocity from config
 	m_player->cTransform->velocity = { 0,0 };
 
-	// implement player movement
-	// need to set velocity from playerConfig (once we start reading that in)
 	if (m_player->cInput->up &&
 		(m_player->cTransform->pos.y - m_player->cShape->circle.getRadius() >= 0))
 	{
@@ -87,7 +170,6 @@ void Game::sMovement()
 		m_player->cTransform->velocity.x = 5;
 	}
 
-	// sample movement speed update
 	m_player->cTransform->pos.x += m_player->cTransform->velocity.x;
 	m_player->cTransform->pos.y += m_player->cTransform->velocity.y;
 }
@@ -173,7 +255,6 @@ void Game::sRender()
 {
 	m_window.clear();
 
-	// draw all entities
 	for (auto e : m_entities.getEntities())
 	{
 		// set the position of the shape based on the entitys transform->pos
@@ -183,7 +264,6 @@ void Game::sRender()
 		e->cTransform->angle += 1.0f;
 		e->cShape->circle.setRotation(e->cTransform->angle);
 
-		// draw the entitys sf::CircleShape
 		m_window.draw(e->cShape->circle);
 	}
 

@@ -20,12 +20,11 @@ void Game::run()
 		// if not paused do some things
 		if (!m_paused)
 		{
-
+			sEnemySpawner();
+			sMovement();
+			sCollision();
 		}
 
-		sEnemySpawner();
-		sMovement();
-		sCollision();
 		sUserInput();
 		sRender();
 
@@ -79,6 +78,8 @@ void Game::setPaused(bool paused)
 // ***** SYSTEMS *****
 void Game::sMovement()
 {
+	// todo: handle movement for all ENTITIES - NOT JUST PLAYER
+	// need to check if enemy has hit edge of screen and reverse course
 	m_player->cTransform->velocity = { 0,0 };
 
 	if (m_player->cInput->up &&
@@ -135,6 +136,10 @@ void Game::sUserInput()
 			case sf::Keyboard::D:
 				std::cout << "D Key Pressed\n";
 				m_player->cInput->right = true;
+				break;
+			case sf::Keyboard::P:
+				std::cout << "P Key Pressed\n";
+				setPaused(!m_paused);
 				break;
 			default:
 				break;

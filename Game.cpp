@@ -37,7 +37,6 @@ void Game::run()
 
 void Game::init(const std::string& path)
 {
-	// read in config file here
 	std::ifstream fin(path);
 	std::string configCode;
 
@@ -235,24 +234,19 @@ void Game::sLifespan()
 // ***** PRIVATE *****
 void Game::spawnPlayer()
 {
-	// todo: finish adding all properties of the player with the correct values from the config
-	// whats listed is an example - but needs to be changed
-
-	// we create every entity by calling EntityManager.addEntity(tag)
-	// this returns a std::shared_ptr<Entity>, so we use auto to save typing
 	auto entity = m_entities.addEntity("player");
 
-	// these values will put player in middle of the screen
 	float midx = m_window.getSize().x / 2.0f;
 	float midy = m_window.getSize().y / 2.0f;
 	entity->cTransform = std::make_shared<CTransform>(
 		Vec2(midx, midy), Vec2(0.0f, 0.0f), 0.0f);
 
-	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickeness 4
 	entity->cShape = std::make_shared<CShape>(
-		32.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 4.0f);
+		m_playerConfig.SR, m_playerConfig.V, 
+		sf::Color(m_playerConfig.FR, m_playerConfig.FG, m_playerConfig.FB), 
+		sf::Color(m_playerConfig.OR, m_playerConfig.OG, m_playerConfig.OB), 
+		m_playerConfig.OT);
 
-	// add an input component to the player so that we can use inputs
 	entity->cInput = std::make_shared <CInput>();
 
 	m_player = entity;

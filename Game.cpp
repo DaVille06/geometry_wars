@@ -146,28 +146,27 @@ void Game::setPaused(bool paused)
 // ***** SYSTEMS *****
 void Game::sMovement()
 {
-	// todo: read velocity from config
 	m_player->cTransform->velocity = { 0,0 };
 
 	if (m_player->cInput->up &&
-		(m_player->cTransform->pos.y - m_player->cShape->circle.getRadius() >= 0))
+		(m_player->cTransform->pos.y - m_playerConfig.CR >= 0))
 	{
-		m_player->cTransform->velocity.y = -5;
+		m_player->cTransform->velocity.y = -m_playerConfig.S;
 	}
 	if (m_player->cInput->left &&
-		(m_player->cTransform->pos.x - m_player->cShape->circle.getRadius() >= 0))
+		(m_player->cTransform->pos.x - m_playerConfig.CR >= 0))
 	{
-		m_player->cTransform->velocity.x = -5;
+		m_player->cTransform->velocity.x = -m_playerConfig.S;
 	}
 	if (m_player->cInput->down &&
-		(m_player->cTransform->pos.y + m_player->cShape->circle.getRadius() <= m_window.getSize().y))
+		(m_player->cTransform->pos.y + m_playerConfig.CR <= m_window.getSize().y))
 	{
-		m_player->cTransform->velocity.y = 5;
+		m_player->cTransform->velocity.y = m_playerConfig.S;
 	}
 	if (m_player->cInput->right &&
-		(m_player->cTransform->pos.x + m_player->cShape->circle.getRadius() <= m_window.getSize().x))
+		(m_player->cTransform->pos.x + m_playerConfig.CR <= m_window.getSize().x))
 	{
-		m_player->cTransform->velocity.x = 5;
+		m_player->cTransform->velocity.x = m_playerConfig.S;
 	}
 
 	m_player->cTransform->pos.x += m_player->cTransform->velocity.x;

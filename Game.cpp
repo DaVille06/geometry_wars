@@ -205,13 +205,8 @@ void Game::sRender()
 
 void Game::sEnemySpawner()
 {
-	// todo: code which implements enemy spawning should go here
-
-	// use (m_currentFrame - m_lastEnemySpawnTime) to determine
-	// how long it has been since the last enemy spawned
-	// if curentframe - spawntime is 100 and I want to wait til 200
-	// then don't spawn
-	//spawnEnemy();
+	if (m_currentFrame - m_lastEnemySpawnTime >= m_enemyConfig.SI)
+		spawnEnemy();
 }
 
 void Game::sCollision()

@@ -77,49 +77,58 @@ void Game::sMovement()
 
 void Game::sUserInput()
 {
-	// todo: handle user input here
-	// note that you should only be setting the players input component variables here
-	// you should not implement the players movement logic here
-	// the movement system will read the variables you set in this function
+	// todo: handle mouse clicks
 
 	sf::Event event;
 	while (m_window.pollEvent(event))
 	{
-		// this event triggers when the window is closed
 		if (event.type == sf::Event::Closed)
 			m_running = false;
 
-		// this event is triggered when a key is pressed
 		if (event.type == sf::Event::KeyPressed)
 		{
 			switch (event.key.code)
 			{
 			case sf::Keyboard::W:
 				std::cout << "W Key Pressed\n";
-				// todo: set players input component "up" to true
 				m_player->cInput->up = true;
 				break;
 			case sf::Keyboard::A:
 				std::cout << "A Key Pressed\n";
+				m_player->cInput->left = true;
 				break;
 			case sf::Keyboard::S:
 				std::cout << "S Key Pressed\n";
+				m_player->cInput->down = true;
 				break;
 			case sf::Keyboard::D:
 				std::cout << "D Key Pressed\n";
+				m_player->cInput->right = true;
+				break;
+			default:
 				break;
 			}
 		}
 
-		// this event triggers when a key is released
 		if (event.type == sf::Event::KeyReleased)
 		{
 			switch (event.key.code)
 			{
 			case sf::Keyboard::W:
 				std::cout << "W Key Released\n";
-				// todo: set players input component "up" to false
 				m_player->cInput->up = false;
+				break;
+			case sf::Keyboard::A:
+				std::cout << "A Key Released\n";
+				m_player->cInput->left = false;
+				break;
+			case sf::Keyboard::S:
+				std::cout << "S Key Released\n";
+				m_player->cInput->down = false;
+				break;
+			case sf::Keyboard::D:
+				std::cout << "D Key Released\n";
+				m_player->cInput->right = false;
 				break;
 			default:
 				break;
@@ -216,8 +225,6 @@ void Game::spawnPlayer()
 	// add an input component to the player so that we can use inputs
 	entity->cInput = std::make_shared <CInput>();
 
-	// since we want this entity to be our player, set our games player variable to be this entity
-	// this goes slightly against the entity manager paradigm
 	m_player = entity;
 }
 

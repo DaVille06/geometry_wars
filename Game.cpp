@@ -7,23 +7,6 @@ Game::Game(const std::string& config)
 	init(config);
 }
 
-void Game::init(const std::string& path)
-{
-	// read in config file here
-	std::ifstream fin(path);
-	// use the premade PlayerConfig, EnemyConfig, BulletConfig variables
-
-	// if i know im on player portion
-	//fin >> m_playerConfig.SR >> m_playerConfig.CR >> ....
-
-	// set up default window parameters
-	// read these from config as well
-	m_window.create(sf::VideoMode(1280, 720), "Assignment 2");
-	m_window.setFramerateLimit(60);
-
-	spawnPlayer();
-}
-
 void Game::run()
 {
 	// add pause functionality here
@@ -52,83 +35,29 @@ void Game::run()
 	}
 }
 
+void Game::init(const std::string& path)
+{
+	// read in config file here
+	std::ifstream fin(path);
+	// use the premade PlayerConfig, EnemyConfig, BulletConfig variables
+
+	// if i know im on player portion
+	//fin >> m_playerConfig.SR >> m_playerConfig.CR >> ....
+
+	// set up default window parameters
+	// read these from config as well
+	m_window.create(sf::VideoMode(1280, 720), "Assignment 2");
+	m_window.setFramerateLimit(60);
+
+	spawnPlayer();
+}
+
 void Game::setPaused(bool paused) 
 {
 	m_paused = paused;
 }
 
-// respawn in the middle of the screen
-void Game::spawnPlayer()
-{
-	// todo: finish adding all properties of the player with the correct values from the config
-	// whats listed is an example - but needs to be changed
-
-	// we create every entity by calling EntityManager.addEntity(tag)
-	// this returns a std::shared_ptr<Entity>, so we use auto to save typing
-	auto entity = m_entities.addEntity("player");
-
-	// these values will put player in middle of the screen
-	float midx = m_window.getSize().x / 2.0f;
-	float midy = m_window.getSize().y / 2.0f;
-	entity->cTransform = std::make_shared<CTransform>(
-		Vec2(midx, midy), Vec2(0.0f, 0.0f), 0.0f);
-
-	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickeness 4
-	entity->cShape = std::make_shared<CShape>(
-		32.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 4.0f);
-
-	// add an input component to the player so that we can use inputs
-	entity->cInput = std::make_shared <CInput>();
-
-	// since we want this entity to be our player, set our games player variable to be this entity
-	// this goes slightly against the entity manager paradigm
-	m_player = entity;
-}
-
-// spawn enemy at a random position
-void Game::spawnEnemy() 
-{
-	// todo: make sure the enemy is spawned properly with the m_enemyConfig variables
-	// the enemy must be spawned completely within the bounds of the window
-	auto entity = m_entities.addEntity("enemy");
-
-	// give this entity a transform so it spawns at (200, 200) with velocity (1,1) and angle 0
-	float ex = rand() % m_window.getSize().x;
-	float ey = rand() % m_window.getSize().y;
-
-	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey), Vec2(0.0f, 0.0f), 0.0f);
-
-	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickness 4
-	entity->cShape = std::make_shared<CShape>(16.0f, 8, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
-
-	// record when the most recent enemy was spawned
-	m_lastEnemySpawnTime = m_currentFrame;
-}
-
-// spawns the small enemies when a big one (input entity entity) explodes
-void Game::spawnSmallEnemies(std::shared_ptr<Entity> entity) 
-{
-	// todo: spawn small enemies at the location of the input enemy entity
-
-	// when we create the smaller enemy, we have to read the values of the original enemy
-	// spawn a number of small enemies equal to the vertices of the original enemy
-	// set each small enemy to the same color as the original, half the size
-	// small enemies are worth double points of the original enemy
-}
-
-// spawns a bullet from a given entity to a target location
-void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos) 
-{
-	// todo: implement the spawning of a bullet which travels toward target
-	// bullet speed is given as a scalar speed
-	// you must set the velocity by using formula in notes
-}
-
-void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity) 
-{
-	// todo: implement your own special weapon
-}
-
+// ***** SYSTEMS *****
 void Game::sMovement()
 {
 	// todo: implement all entity movement in this function
@@ -262,4 +191,75 @@ void Game::sLifespan()
 	//		scale its alpha chanel properly
 	// if it has lifespan and its time is up
 	//		destroy the entity
+}
+
+// ***** PRIVATE *****
+void Game::spawnPlayer()
+{
+	// todo: finish adding all properties of the player with the correct values from the config
+	// whats listed is an example - but needs to be changed
+
+	// we create every entity by calling EntityManager.addEntity(tag)
+	// this returns a std::shared_ptr<Entity>, so we use auto to save typing
+	auto entity = m_entities.addEntity("player");
+
+	// these values will put player in middle of the screen
+	float midx = m_window.getSize().x / 2.0f;
+	float midy = m_window.getSize().y / 2.0f;
+	entity->cTransform = std::make_shared<CTransform>(
+		Vec2(midx, midy), Vec2(0.0f, 0.0f), 0.0f);
+
+	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickeness 4
+	entity->cShape = std::make_shared<CShape>(
+		32.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 4.0f);
+
+	// add an input component to the player so that we can use inputs
+	entity->cInput = std::make_shared <CInput>();
+
+	// since we want this entity to be our player, set our games player variable to be this entity
+	// this goes slightly against the entity manager paradigm
+	m_player = entity;
+}
+
+// spawn enemy at a random position
+void Game::spawnEnemy()
+{
+	// todo: make sure the enemy is spawned properly with the m_enemyConfig variables
+	// the enemy must be spawned completely within the bounds of the window
+	auto entity = m_entities.addEntity("enemy");
+
+	// give this entity a transform so it spawns at (200, 200) with velocity (1,1) and angle 0
+	float ex = rand() % m_window.getSize().x;
+	float ey = rand() % m_window.getSize().y;
+
+	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey), Vec2(0.0f, 0.0f), 0.0f);
+
+	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickness 4
+	entity->cShape = std::make_shared<CShape>(16.0f, 8, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
+
+	// record when the most recent enemy was spawned
+	m_lastEnemySpawnTime = m_currentFrame;
+}
+
+void Game::spawnSmallEnemies(std::shared_ptr<Entity> entity)
+{
+	// todo: spawn small enemies at the location of the input enemy entity
+
+	// when we create the smaller enemy, we have to read the values of the original enemy
+	// spawn a number of small enemies equal to the vertices of the original enemy
+	// set each small enemy to the same color as the original, half the size
+	// small enemies are worth double points of the original enemy
+}
+
+// spawns a bullet from a given entity to a target location
+void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
+{
+	// todo: implement the spawning of a bullet which travels toward target
+	// bullet speed is given as a scalar speed
+	// you must set the velocity by using formula in notes
+}
+
+void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
+{
+	// todo: implement your own special weapon
 }

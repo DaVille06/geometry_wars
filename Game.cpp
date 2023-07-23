@@ -9,10 +9,6 @@ Game::Game(const std::string& config)
 
 void Game::run()
 {
-	// add pause functionality here
-	// some systems should function while paused (rendering)
-	// some systems shouldn't (movement / input)
-
 	while (m_running)
 	{
 		m_entities.update();

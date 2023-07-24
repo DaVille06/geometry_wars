@@ -178,6 +178,9 @@ void Game::sUserInput()
 				std::cout << "D Key Released\n";
 				m_player->cInput->right = false;
 				break;
+			case sf::Keyboard::R:
+				std::cout << "R Key Released\n";
+				resetGame();
 			default:
 				break;
 			}
@@ -188,7 +191,7 @@ void Game::sUserInput()
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
 				std::cout << "Left mouse button clicked at (" << event.mouseButton.x << "," << event.mouseButton.y << ")\n";
-				// call spawn bullet here
+				//spawnBullet();
 			}
 
 			if (event.mouseButton.button == sf::Mouse::Right)
@@ -259,7 +262,8 @@ void Game::spawnPlayer()
 		sf::Color(m_playerConfig.OR, m_playerConfig.OG, m_playerConfig.OB), 
 		m_playerConfig.OT);
 
-	entity->cInput = std::make_shared <CInput>();
+	entity->cInput = std::make_shared<CInput>();
+	entity->cScore = std::make_shared<CScore>(0);
 
 	m_player = entity;
 }
@@ -267,11 +271,10 @@ void Game::spawnPlayer()
 // spawn enemy at a random position
 void Game::spawnEnemy()
 {
-	// todo: make sure the enemy is spawned properly with the m_enemyConfig variables
-	// the enemy must be spawned completely within the bounds of the window
+	// todo: the enemy must be spawned completely within the bounds of the window
 	auto entity = m_entities.addEntity("enemy");
 
-	// give this entity a transform so it spawns at (200, 200) with velocity (1,1) and angle 0
+	// not correct
 	float ex = rand() % m_window.getSize().x;
 	float ey = rand() % m_window.getSize().y;
 
@@ -292,7 +295,6 @@ void Game::spawnEnemy()
 	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey),
 		Vec2(randSpeed, randSpeed), 0.0f);
 
-	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickness 4
 	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, sf::Color(0, 0, 0), 
 		sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB), m_enemyConfig.OT);
 
@@ -321,6 +323,18 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
 {
 	// todo: implement your own special weapon
+}
+
+void Game::resetGame()
+{
+	// clear score
+	// set all enemies to dead
+	m_player->cScore->score = 0;
+
+	for (auto& entity : m_entities.getEntities("enemy"))
+	{
+		entity->destroy();
+	}
 }
 
 // ***** READ CONFIGS *****

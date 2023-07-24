@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include <algorithm>
 
 EntityManager::EntityManager() { }
 
@@ -44,8 +45,13 @@ EntityVec& EntityManager::getEntities(const std::string& tag)
 	return m_entityMap[tag];
 }
 
+auto entityIsDead = [&](std::shared_ptr<Entity> entity) -> bool 
+{
+	return !entity->isActive();
+};
+
 void EntityManager::removeDeadEntities(EntityVec& vec)
 {
-	// remove all dead entities from the input vector
-	// this is called by the update() function
+	auto entitiesIterator = std::remove_if(vec.begin(), vec.end(), entityIsDead);
+	vec.erase(entitiesIterator, vec.end());
 }

@@ -20,6 +20,7 @@ void Game::run()
 			sEnemySpawner();
 			sMovement();
 			sCollision();
+			sLifespan();
 		}
 
 		sUserInput();
@@ -246,9 +247,9 @@ void Game::sCollision()
 	// be sure to use the collision radius, NOT the shape radius
 
 	// if distance <= enemy & player CRs then the two have collided
-	for (auto b : m_entities.getEntities("bullet"))
+	for (auto bullet : m_entities.getEntities("bullet"))
 	{
-		for (auto e : m_entities.getEntities("enemy"))
+		for (auto enemy : m_entities.getEntities("enemy"))
 		{
 			// destination - origin
 			//Vec2 distance = e->cTransform->pos - b->cTransform->pos;
@@ -260,6 +261,16 @@ void Game::sCollision()
 			//	b->destroy();
 			//	e->destroy();
 			//}
+
+			// need difference vector between them
+			Vec2 diff = enemy->cTransform->pos - bullet->cTransform->pos;
+			if ((diff.x * diff.x + diff.y * diff.y) < (enemy->cCollision->radius + bullet->cCollision->radius))
+			{
+				// we have collision
+				std::cout << "We have collision\n";
+				enemy->destroy();
+				bullet->destroy();
+			}
 		}
 	}
 }
@@ -274,6 +285,16 @@ void Game::sLifespan()
 	//		scale its alpha chanel properly
 	// if it has lifespan and its time is up
 	//		destroy the entity
+	for (auto& entity : m_entities.getEntities())
+	{
+		if (entity->cLifespan)
+		{
+			if (entity->cLifespan->remaining > 0)
+				entity->cLifespan->remaining -= 1;
+			else
+				entity->destroy();
+		}
+	}
 }
 
 // ***** PRIVATE *****
@@ -371,7 +392,7 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 		sf::Color(m_bulletConfig.FR, m_bulletConfig.FG, m_bulletConfig.FB),
 		sf::Color(m_bulletConfig.OR, m_bulletConfig.OG, m_bulletConfig.OB),
 		m_bulletConfig.OT);
-
+	bullet->cLifespan = std::make_shared<CLifespan>(m_bulletConfig.L);
 	bullet->cCollision = std::make_shared<CCollision>(m_bulletConfig.CR);
 }
 

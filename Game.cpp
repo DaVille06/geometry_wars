@@ -234,6 +234,13 @@ void Game::sCollision()
 	// be sure to use the collision radius, NOT the shape radius
 
 	// if distance <= enemy & player CRs then the two have collided
+	for (auto b : m_entities.getEntities("bullet"))
+	{
+		for (auto e : m_entities.getEntities("enemy"))
+		{
+
+		}
+	}
 }
 
 void Game::sLifespan()
@@ -294,12 +301,18 @@ void Game::spawnEnemy()
 	// random vertices
 	int randVertices = (rand() % (1 + m_enemyConfig.VMAX - m_enemyConfig.VMIN)) + m_enemyConfig.VMIN;
 	float randSpeed = (rand() % (int)(1 + m_enemyConfig.SMAX - m_enemyConfig.SMIN)) + m_enemyConfig.SMIN;
+	int randRColor = (rand() % (1 + 255 - 0)) + 0;
+	int randGColor = (rand() % (1 + 255 - 0)) + 0;
+	int randBColor = (rand() % (1 + 255 - 0)) + 0;
 
 	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey),
 		Vec2(randSpeed, randSpeed), 0.0f);
 
-	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, sf::Color(0, 0, 0), 
+	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, 
+		sf::Color(randRColor, randGColor, randBColor), 
 		sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB), m_enemyConfig.OT);
+	// set the origin to be the middle of the circle, not top left
+	entity->cShape->circle.setOrigin(m_enemyConfig.SR, m_enemyConfig.SR);
 
 	entity->cCollision = std::make_shared<CCollision>(m_enemyConfig.CR);
 
@@ -327,8 +340,8 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 	auto bullet = m_entities.addEntity("bullet");
 
 	bullet->cTransform = std::make_shared<CTransform>(
-		//Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y),
-		Vec2(mousePos.x, mousePos.y),
+		Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y),
+		//Vec2(mousePos.x, mousePos.y),
 		Vec2(0.0f, 0.0f), 0.0f);
 
 	bullet->cShape = std::make_shared<CShape>(

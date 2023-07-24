@@ -264,6 +264,7 @@ void Game::spawnPlayer()
 
 	entity->cInput = std::make_shared<CInput>();
 	entity->cScore = std::make_shared<CScore>(0);
+	entity->cCollision = std::make_shared<CCollision>(m_playerConfig.CR);
 
 	m_player = entity;
 }
@@ -297,6 +298,8 @@ void Game::spawnEnemy()
 
 	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, sf::Color(0, 0, 0), 
 		sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB), m_enemyConfig.OT);
+
+	entity->cCollision = std::make_shared<CCollision>(m_enemyConfig.CR);
 
 	// record when the most recent enemy was spawned
 	m_lastEnemySpawnTime = m_currentFrame;

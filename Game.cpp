@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 Game::Game(const std::string& config)
 {
@@ -75,17 +76,28 @@ void Game::setPaused(bool paused)
 void Game::sMovement()
 {
 	// todo: handle movement for all ENTITIES - NOT JUST PLAYER
+
+	// BULLET MOVEMENT
+	for (auto bullet : m_entities.getEntities("bullet"))
+	{
+		bullet->cTransform->pos.x += bullet->cTransform->velocity.x;
+		bullet->cTransform->pos.y += bullet->cTransform->velocity.y;
+	}
 	
 	// ENEMY MOVEMENT
 	for (auto enemy : m_entities.getEntities("enemy"))
 	{
 		if ((enemy->cTransform->pos.x + enemy->cShape->circle.getRadius() >= m_window.getSize().x) ||
 			(enemy->cTransform->pos.x - enemy->cShape->circle.getRadius() <= 0))
+		{
 			enemy->cTransform->velocity.x *= -1;
+		}
 
 		if ((enemy->cTransform->pos.y + enemy->cShape->circle.getRadius() >= m_window.getSize().y) ||
 			(enemy->cTransform->pos.y - enemy->cShape->circle.getRadius() <= 0))
+		{
 			enemy->cTransform->velocity.y *= -1;
+		}
 
 		enemy->cTransform->pos.x += enemy->cTransform->velocity.x;
 		enemy->cTransform->pos.y += enemy->cTransform->velocity.y;
@@ -238,7 +250,16 @@ void Game::sCollision()
 	{
 		for (auto e : m_entities.getEntities("enemy"))
 		{
-
+			// destination - origin
+			//Vec2 distance = e->cTransform->pos - b->cTransform->pos;
+			//if ((e->cCollision->radius + b->cCollision->radius) >= distance.x ||
+			//	(e->cCollision->radius + b->cCollision->radius) >= distance.y)
+			//{
+			//	// they have collided
+			//	std::cout << "Bullet has collided with enemy...destroy both\n";
+			//	b->destroy();
+			//	e->destroy();
+			//}
 		}
 	}
 }
@@ -332,10 +353,18 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 
 	auto bullet = m_entities.addEntity("bullet");
 
+	// first get difference vector
+	Vec2 diff = mousePos - entity->cTransform->pos;
+	// get length value
+	float length = sqrtf(diff.x * diff.x + diff.y * diff.y);
+	// diff has length l, we want it to be S (normalize it)
+	Vec2 normalizedVec { diff.x / length, diff.y / length };
+	Vec2 velocity{ m_bulletConfig.S * normalizedVec.x, m_bulletConfig.S * normalizedVec.y };
+
 	bullet->cTransform = std::make_shared<CTransform>(
 		Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y),
-		//Vec2(mousePos.x, mousePos.y),
-		Vec2(0.0f, 0.0f), 0.0f);
+		//Vec2(mousePos.x, mousePos.y), 
+		Vec2(velocity.x, velocity.y), 0.0f);
 
 	bullet->cShape = std::make_shared<CShape>(
 		m_bulletConfig.SR, m_bulletConfig.V,

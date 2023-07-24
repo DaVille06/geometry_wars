@@ -75,7 +75,23 @@ void Game::setPaused(bool paused)
 void Game::sMovement()
 {
 	// todo: handle movement for all ENTITIES - NOT JUST PLAYER
-	// need to check if enemy has hit edge of screen and reverse course
+	
+	// ENEMY MOVEMENT
+	for (auto enemy : m_entities.getEntities("enemy"))
+	{
+		if ((enemy->cTransform->pos.x + enemy->cShape->circle.getRadius() >= m_window.getSize().x) ||
+			(enemy->cTransform->pos.x - enemy->cShape->circle.getRadius() <= 0))
+			enemy->cTransform->velocity.x *= -1;
+
+		if ((enemy->cTransform->pos.y + enemy->cShape->circle.getRadius() >= m_window.getSize().y) ||
+			(enemy->cTransform->pos.y - enemy->cShape->circle.getRadius() <= 0))
+			enemy->cTransform->velocity.y *= -1;
+
+		enemy->cTransform->pos.x += enemy->cTransform->velocity.x;
+		enemy->cTransform->pos.y += enemy->cTransform->velocity.y;
+	}
+
+	// PLAYER MOVEMENT
 	m_player->cTransform->velocity = { 0,0 };
 
 	if (m_player->cInput->up &&
@@ -259,10 +275,26 @@ void Game::spawnEnemy()
 	float ex = rand() % m_window.getSize().x;
 	float ey = rand() % m_window.getSize().y;
 
-	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey), Vec2(0.0f, 0.0f), 0.0f);
+	// random example 
+	srand(time(NULL));
+	
+	// random range example
+	// diff = 1 + max - min
+	// r = rand() % diff
+	//	r = random value from [0, diff - 1]
+	// r = r + min;
+	// r = (rand() % (1 + max - min)) + min;
+	
+	// random vertices
+	int randVertices = (rand() % (1 + m_enemyConfig.VMAX - m_enemyConfig.VMIN)) + m_enemyConfig.VMIN;
+	float randSpeed = (rand() % (int)(1 + m_enemyConfig.SMAX - m_enemyConfig.SMIN)) + m_enemyConfig.SMIN;
+
+	entity->cTransform = std::make_shared<CTransform>(Vec2(ex, ey),
+		Vec2(randSpeed, randSpeed), 0.0f);
 
 	// the entitys shape will have radius 32, 8 sides, dark grey fill, and red outline of thickness 4
-	entity->cShape = std::make_shared<CShape>(16.0f, 8, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
+	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, sf::Color(0, 0, 0), 
+		sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB), m_enemyConfig.OT);
 
 	// record when the most recent enemy was spawned
 	m_lastEnemySpawnTime = m_currentFrame;

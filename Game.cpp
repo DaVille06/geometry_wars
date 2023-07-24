@@ -95,22 +95,22 @@ void Game::sMovement()
 	m_player->cTransform->velocity = { 0,0 };
 
 	if (m_player->cInput->up &&
-		(m_player->cTransform->pos.y - m_playerConfig.CR >= 0))
+		(m_player->cTransform->pos.y - m_player->cCollision->radius >= 0))
 	{
 		m_player->cTransform->velocity.y = -m_playerConfig.S;
 	}
 	if (m_player->cInput->left &&
-		(m_player->cTransform->pos.x - m_playerConfig.CR >= 0))
+		(m_player->cTransform->pos.x - m_player->cCollision->radius >= 0))
 	{
 		m_player->cTransform->velocity.x = -m_playerConfig.S;
 	}
 	if (m_player->cInput->down &&
-		(m_player->cTransform->pos.y + m_playerConfig.CR <= m_window.getSize().y))
+		(m_player->cTransform->pos.y + m_player->cCollision->radius <= m_window.getSize().y))
 	{
 		m_player->cTransform->velocity.y = m_playerConfig.S;
 	}
 	if (m_player->cInput->right &&
-		(m_player->cTransform->pos.x + m_playerConfig.CR <= m_window.getSize().x))
+		(m_player->cTransform->pos.x + m_player->cCollision->radius <= m_window.getSize().x))
 	{
 		m_player->cTransform->velocity.x = m_playerConfig.S;
 	}

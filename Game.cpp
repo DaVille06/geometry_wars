@@ -291,13 +291,6 @@ void Game::spawnEnemy()
 	// random example 
 	srand(time(NULL));
 	
-	// random range example
-	// diff = 1 + max - min
-	// r = rand() % diff
-	//	r = random value from [0, diff - 1]
-	// r = r + min;
-	// r = (rand() % (1 + max - min)) + min;
-	
 	// random vertices
 	int randVertices = (rand() % (1 + m_enemyConfig.VMAX - m_enemyConfig.VMIN)) + m_enemyConfig.VMIN;
 	float randSpeed = (rand() % (int)(1 + m_enemyConfig.SMAX - m_enemyConfig.SMIN)) + m_enemyConfig.SMIN;
@@ -311,9 +304,9 @@ void Game::spawnEnemy()
 	entity->cShape = std::make_shared<CShape>(m_enemyConfig.SR, randVertices, 
 		sf::Color(randRColor, randGColor, randBColor), 
 		sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB), m_enemyConfig.OT);
+
 	// set the origin to be the middle of the circle, not top left
 	entity->cShape->circle.setOrigin(m_enemyConfig.SR, m_enemyConfig.SR);
-
 	entity->cCollision = std::make_shared<CCollision>(m_enemyConfig.CR);
 
 	// record when the most recent enemy was spawned

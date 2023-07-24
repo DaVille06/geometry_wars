@@ -191,7 +191,7 @@ void Game::sUserInput()
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
 				std::cout << "Left mouse button clicked at (" << event.mouseButton.x << "," << event.mouseButton.y << ")\n";
-				//spawnBullet();
+				spawnBullet(m_player, { (float)event.mouseButton.x, (float)event.mouseButton.y });
 			}
 
 			if (event.mouseButton.button == sf::Mouse::Right)
@@ -232,6 +232,8 @@ void Game::sCollision()
 {
 	// todo: implement all proper collisions between entities
 	// be sure to use the collision radius, NOT the shape radius
+
+	// if distance <= enemy & player CRs then the two have collided
 }
 
 void Game::sLifespan()
@@ -321,6 +323,21 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 	// todo: implement the spawning of a bullet which travels toward target
 	// bullet speed is given as a scalar speed
 	// you must set the velocity by using formula in notes
+
+	auto bullet = m_entities.addEntity("bullet");
+
+	bullet->cTransform = std::make_shared<CTransform>(
+		//Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y),
+		Vec2(mousePos.x, mousePos.y),
+		Vec2(0.0f, 0.0f), 0.0f);
+
+	bullet->cShape = std::make_shared<CShape>(
+		m_bulletConfig.SR, m_bulletConfig.V,
+		sf::Color(m_bulletConfig.FR, m_bulletConfig.FG, m_bulletConfig.FB),
+		sf::Color(m_bulletConfig.OR, m_bulletConfig.OG, m_bulletConfig.OB),
+		m_bulletConfig.OT);
+
+	bullet->cCollision = std::make_shared<CCollision>(m_bulletConfig.CR);
 }
 
 void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
@@ -330,8 +347,6 @@ void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
 
 void Game::resetGame()
 {
-	// clear score
-	// set all enemies to dead
 	m_player->cScore->score = 0;
 
 	for (auto& entity : m_entities.getEntities("enemy"))

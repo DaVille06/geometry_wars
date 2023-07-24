@@ -264,7 +264,8 @@ void Game::sCollision()
 
 			// need difference vector between them
 			Vec2 diff = enemy->cTransform->pos - bullet->cTransform->pos;
-			if ((diff.x * diff.x + diff.y * diff.y) < (enemy->cCollision->radius + bullet->cCollision->radius))
+			if ((diff.x * diff.x + diff.y * diff.y) < 
+				((enemy->cCollision->radius + bullet->cCollision->radius) * (enemy->cCollision->radius + bullet->cCollision->radius)))
 			{
 				// we have collision
 				std::cout << "We have collision\n";

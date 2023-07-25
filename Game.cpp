@@ -245,33 +245,29 @@ void Game::sCollision()
 {
 	// todo: implement all proper collisions between entities
 	// be sure to use the collision radius, NOT the shape radius
-
-	// if distance <= enemy & player CRs then the two have collided
-	for (auto bullet : m_entities.getEntities("bullet"))
+	for (auto& bullet : m_entities.getEntities("bullet"))
 	{
-		for (auto enemy : m_entities.getEntities("enemy"))
+		for (auto& enemy : m_entities.getEntities("enemy"))
 		{
-			// destination - origin
-			//Vec2 distance = e->cTransform->pos - b->cTransform->pos;
-			//if ((e->cCollision->radius + b->cCollision->radius) >= distance.x ||
-			//	(e->cCollision->radius + b->cCollision->radius) >= distance.y)
-			//{
-			//	// they have collided
-			//	std::cout << "Bullet has collided with enemy...destroy both\n";
-			//	b->destroy();
-			//	e->destroy();
-			//}
-
-			// need difference vector between them
-			Vec2 diff = enemy->cTransform->pos - bullet->cTransform->pos;
-			if ((diff.x * diff.x + diff.y * diff.y) < 
+			Vec2 diff_enemy_bullet = enemy->cTransform->pos - bullet->cTransform->pos;
+			if ((diff_enemy_bullet.x * diff_enemy_bullet.x + diff_enemy_bullet.y * diff_enemy_bullet.y) <
 				((enemy->cCollision->radius + bullet->cCollision->radius) * (enemy->cCollision->radius + bullet->cCollision->radius)))
 			{
-				// we have collision
-				std::cout << "We have collision\n";
 				enemy->destroy();
 				bullet->destroy();
 			}
+		}
+	}
+
+	for (auto& enemy : m_entities.getEntities("enemy"))
+	{
+		Vec2 diff_enemy_player = enemy->cTransform->pos - m_player->cTransform->pos;
+		if ((diff_enemy_player.x * diff_enemy_player.x + diff_enemy_player.y * diff_enemy_player.y) <
+			((enemy->cCollision->radius + m_player->cCollision->radius) * (enemy->cCollision->radius + m_player->cCollision->radius)))
+		{
+			enemy->destroy();
+			m_player->destroy();
+			// need to spawn a new player;
 		}
 	}
 }
@@ -385,7 +381,6 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2& mousePos)
 
 	bullet->cTransform = std::make_shared<CTransform>(
 		Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y),
-		//Vec2(mousePos.x, mousePos.y), 
 		Vec2(velocity.x, velocity.y), 0.0f);
 
 	bullet->cShape = std::make_shared<CShape>(
@@ -404,11 +399,18 @@ void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
 
 void Game::resetGame()
 {
-	m_player->cScore->score = 0;
-
-	for (auto& entity : m_entities.getEntities("enemy"))
+	if (m_paused)
 	{
-		entity->destroy();
+		m_player->cScore->score = 0;
+
+		for (auto& entity : m_entities.getEntities("enemy"))
+		{
+			entity->destroy();
+		}
+
+		m_player->destroy();
+		spawnPlayer();
+		setPaused(false);
 	}
 }
 
